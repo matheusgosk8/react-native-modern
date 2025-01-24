@@ -1,95 +1,41 @@
 import { Link } from "expo-router";
 import React, { useState } from "react";
-import { Button, NativeSyntheticEvent, Pressable, ScrollView, Text, TextInput, TextInputChangeEventData, View, FlatList, Image } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import ItemInput from "./components/ItemInput";
-import { TItem } from "@/types/ItensTypes";
-import ItensList from "./components/ItensList";
+import Home from "./Pages/Home";
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Test from "./Pages/Test";
+import { FontAwesome5, AntDesign } from "react-native-vector-icons";
+
+
+const Tab = createBottomTabNavigator();
+
 
 export default function Page() {
 
 
 
-  const [itens, setItens] = useState<TItem[]>([]);
 
-
-  const handleSendItem = (data: string) => {
-
-    if (data) {
-      setItens((itens) => [...itens,
-      {
-        text: data,
-        id: Math.random().toString()
-      }
-      ])
-    }
-
-  }
-
-  const removeItem = (itemId: string) => {
-    const itensTemp = itens.filter((item: TItem) => {
-      return item.id !== itemId
-    })
-    setItens(itensTemp)
-  }
-
-  const [inputModal, setInputModal] = useState<boolean>(false);
-  const modalVisibility = (isVisible: true | false) => {
-    setInputModal(isVisible)
-  }
 
   return (
-    <View className="flex-1 h-[80%]">
-      <View className="w-full h-28  bg-black">
-        <Image
-          className="w-full h-28"
-          source={require('./assets/images/header.png')}
-          alt="Img"
-          resizeMode="contain"
-          height={28}
-        />
-      </View>
 
 
-      <Text className="text-xl font-semibold mt-5 px-2">
-        Tarefas App
-      </Text>
-
-      <Pressable
-        onPress={() => modalVisibility(true)}
-      >
-        <View className="flex flex-col justify-center items-center px-5 my-2">
-          <Text className="border border-black rounded-md bg-blue-500 text-white w-full text-center p-2">
-            Adicionar item
-          </Text>
-        </View>
-
-      </Pressable>
-
-
-      <ItemInput
-        handleSendItem={handleSendItem}
-        isVisible={inputModal}
-        modalVisibility={modalVisibility}
+    <Tab.Navigator initialRouteName="Home" id={undefined}>
+      <Tab.Screen name="Home" component={Home}
+        options={{
+          tabBarIcon: (() => (
+            <AntDesign name='home' size={20} />
+          ))
+        }}
       />
+      <Tab.Screen name="Test" component={Test}
+        options={{
+          tabBarIcon: (() => (
+            <FontAwesome5 name='network-wired' size={20} />
+          ))
+        }}
+      />
+    </Tab.Navigator>
 
-      <View className=" w-full">
-
-        <ItensList itens={itens} removeItem={removeItem} />
-
-
-
-
-      </View>
-
-
-
-
-
-
-
-
-    </View>
   );
 }
 
